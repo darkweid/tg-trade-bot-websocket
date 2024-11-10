@@ -32,7 +32,7 @@ To run the bot with Docker, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/darkweid/bybit-simple-tg-bot.git
+    git clone https://github.com/darkweid/bybit-simple-tg-bot-websocket.git
     cd bybit-simple-tg-bot
     ```
 
@@ -63,7 +63,7 @@ If you prefer to run the bot manually, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/darkweid/bybit-simple-tg-bot.git
+    git clone https://github.com/darkweid/bybit-simple-tg-bot-websocket.git
     cd bybit-simple-tg-bot
     ```
 
@@ -145,7 +145,7 @@ This project is licensed under the MIT License.
 
 1. Клонируйте репозиторий:
     ```bash
-    git clone https://github.com/darkweid/bybit-simple-tg-bot.git
+    git clone https://github.com/darkweid/bybit-simple-tg-bot-websocket.git
     cd bybit-simple-tg-bot
     ```
 
@@ -176,7 +176,7 @@ This project is licensed under the MIT License.
 
 1. Клонируйте репозиторий:
     ```bash
-    git clone https://github.com/darkweid/bybit-simple-tg-bot.git
+    git clone https://github.com/darkweid/bybit-simple-tg-bot-websocket.git
     cd bybit-simple-tg-bot
     ```
 
