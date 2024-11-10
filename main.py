@@ -31,18 +31,18 @@ ws_private = WebSocketTrading(testnet=True, api_key=BYBIT_API_KEY, api_secret=BY
 
 
 class TradingBot:
-    def __init__(self, ws_private, ws_public):
+    def __init__(self, websocket_private: WebSocketTrading, websocket_public: WebSocket):
         """Initializes the TradingBot instance with private and public WebSocket connections."""
         self.active_position = None
-        self.ws_private = ws_private
-        self.ws_public = ws_public
+        self.ws_private = websocket_private
+        self.ws_public = websocket_public
         self.orderbook_data = {"bid": None, "ask": None}
         self.orderbook_event = asyncio.Event()
         self.is_subscribed = False
         self.order_response_event = asyncio.Event()
         self.order_response = None
 
-    def handle_orderbook(self, message):
+    def handle_orderbook(self, message: dict) -> None:
         """Processes the order book data received from WebSocket.
 
         Args:
@@ -63,7 +63,7 @@ class TradingBot:
         except Exception as e:
             logger.error(f"Error in handle_orderbook: {e}")
 
-    def handle_order_response(self, message):
+    def handle_order_response(self, message: dict) -> None:
         """Handles the response to an order request.
 
         Args:
@@ -72,7 +72,7 @@ class TradingBot:
         self.order_response = message
         self.order_response_event.set()
 
-    async def subscribe_to_orderbook(self):
+    async def subscribe_to_orderbook(self) -> None:
         """Subscribes to the order book for market data updates."""
         if not self.is_subscribed:
             try:
@@ -84,7 +84,7 @@ class TradingBot:
                 logger.error(f"Error subscribing to order book: {e}")
                 raise
 
-    async def get_order_book(self):
+    async def get_order_book(self) -> dict[str, None]:
         """Retrieves the current order book data.
 
         Returns:
@@ -92,7 +92,7 @@ class TradingBot:
         """
         return self.orderbook_data
 
-    def calculate_target_price(self, entry_price):
+    def calculate_target_price(self, entry_price: float) -> float:
         """Calculates the target price based on the target profit percentage.
 
         Args:
@@ -103,7 +103,7 @@ class TradingBot:
         """
         return entry_price * (1 + TARGET_PROFIT_PERCENT / 100)
 
-    async def open_position(self):
+    async def open_position(self) -> bool:
         """Opens a new trading position on Bybit.
 
         Returns:
@@ -160,7 +160,7 @@ class TradingBot:
             logger.error(f"Error in open_position: {e}")
             return False
 
-    async def monitor_position(self):
+    async def monitor_position(self) -> None:
         """Monitors the open position to close it upon reaching the target profit."""
         while self.active_position:
             try:
@@ -193,7 +193,7 @@ class TradingBot:
                 logger.error(f"Error in monitor_position: {e}")
                 await asyncio.sleep(1)
 
-    async def close_position(self):
+    async def close_position(self) -> bool:
         """Closes the open position.
 
         Returns:
