@@ -173,19 +173,7 @@ class TradingBot:
                 current_price = order_book['bid']
 
                 if current_price >= self.active_position['target_price']:
-                    success = await self.close_position()
-                    if success:
-                        profit_percentage = (
-                                ((self.orderbook_data['bid'] / self.active_position['entry_price']) - 1) * 100
-                        )
-                        self.active_position = None
-                        await send_notification(f"✅ Position closed!\n"
-                                                f"Trading Pair: {self.active_position['symbol']}\n"
-                                                f"Profit Percentage: {profit_percentage:.2f}%\n"
-                                                f"Entry Price: {self.active_position['entry_price']}\n"
-                                                f"Target Price: {self.active_position['target_price']}\n"
-                                                f"Exit Price: {self.orderbook_data['bid']}")
-                        logger.info(f"Position closed successfully: {self.active_position}")
+                    await self.close_position()
 
                 await asyncio.sleep(0.1)
 
@@ -219,8 +207,17 @@ class TradingBot:
                 return False
 
             if self.order_response and self.order_response.get('retCode') == 0:
-                logger.info(f"Position closed successfully: {self.order_response}")
                 self.active_position = None
+                logger.info(f"Position closed successfully: {self.order_response}")
+
+                bid_price = self.orderbook_data['bid']
+                profit_percentage = ((bid_price / self.active_position['entry_price']) - 1) * 100
+                await send_notification(f"✅ Position closed!\n"
+                                        f"Trading Pair: {self.active_position['symbol']}\n"
+                                        f"Profit Percentage: {profit_percentage:.2f}%\n"
+                                        f"Entry Price: {self.active_position['entry_price']}\n"
+                                        f"Target Price: {self.active_position['target_price']}\n"
+                                        f"Exit Price: {bid_price}")
                 return True
 
             logger.error(f"Error closing position: {self.order_response}")
@@ -229,14 +226,6 @@ class TradingBot:
         except Exception as e:
             logger.error(f"Error in close_position: {e}")
             return False
-
-    # def shutdown(self):
-    #     self.ws_public.close()
-    #     self.ws_private.close()
-    #     tasks = asyncio.all_tasks()
-    #
-    #     for task in tasks:
-    #         task.cancel()
 
 
 # Initialize the trading bot
@@ -287,7 +276,7 @@ async def status_command(message: types.Message):
                 f"📊 Current position:\n"
                 f"Trading Pair: {trading_bot.active_position['symbol']}\n"
                 f"Entry Price: {trading_bot.active_position['entry_price']}\n"
-                f"Target Price: {trading_bot.active_position['target_price']}\n"
+                f"Target Price: {trading_bot.active_position['target_price']:.2f}\n"
                 f"Current Price: {current_price}\n"
                 f"Profit: {current_profit:.2f}%"
             )
