@@ -325,8 +325,45 @@ async def trade_command(message: types.Message):
 
 
 async def main():
-    """Starts the bot and sets up the event loop."""
-    await dp.start_polling(bot)
+    """
+    Starts the bot and sets up the event loop.
+
+    This function handles the lifecycle of the bot, including the startup
+    and graceful shutdown process. It starts the polling for Telegram
+    updates and ensures any open connections and asynchronous tasks are
+    properly closed or canceled on exit.
+
+    - On startup: Sends a notification about the successful start of the bot.
+    - On shutdown: Stops polling, closes the bot session, cancels pending
+      tasks, and sends a notification about the shutdown.
+
+    Exception handling ensures that any errors during the bot's execution
+    are logged appropriately.
+    """
+
+    try:
+        logger.info("Starting bot...")
+        await send_notification("🚀The bot started successfully.")
+        await dp.start_polling(bot)
+    except Exception as e:
+        logger.exception(f"Error in main: {str(e)}")
+    finally:
+        logger.info("Shutting down bot...")
+        await send_notification("⚠️ The bot has shutdown.")
+
+        await dp.stop_polling()
+        await bot.session.close()
+
+        # Cancel all tasks
+        pending = asyncio.all_tasks()
+        for task in pending:
+            task.cancel()
+        try:
+            await asyncio.gather(*pending, return_exceptions=True)
+        except asyncio.CancelledError:
+            logger.info("Cancelled remaining tasks.")
+
+        logger.info("The bot has shutdown succesfully.")
 
 
 if __name__ == "__main__":
