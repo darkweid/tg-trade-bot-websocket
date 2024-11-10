@@ -340,17 +340,16 @@ async def main():
         logger.info("Shutting down bot...")
         await send_notification("⚠️ The bot has shutdown.")
 
-        await dp.stop_polling()
         await bot.session.close()
 
         # Cancel all tasks
         pending = asyncio.all_tasks()
         for task in pending:
-            task.cancel()
-        try:
-            await asyncio.gather(*pending, return_exceptions=True)
-        except asyncio.CancelledError:
-            logger.info("Cancelled remaining tasks.")
+            if task is not asyncio.current_task():
+                task.cancel()
+
+        # Wait for tasks to be cancelled or finished
+        await asyncio.gather(*pending, return_exceptions=True)
 
         logger.info("The bot has shutdown succesfully.")
 
