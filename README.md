@@ -33,7 +33,7 @@ To run the bot with Docker, follow these steps:
 1. Clone the repository:
     ```bash
     git clone https://github.com/darkweid/tg-trade-bot-websocket
-    cd bybit-simple-tg-bot
+    cd tg-trade-bot-websocket
     ```
 
 2. Build the Docker image:
@@ -64,7 +64,7 @@ If you prefer to run the bot manually, follow these steps:
 1. Clone the repository:
     ```bash
     git clone https://github.com/darkweid/tg-trade-bot-websocket
-    cd bybit-simple-tg-bot
+    cd tg-trade-bot-websocket
     ```
 
 2. Create a virtual environment and install dependencies:
@@ -146,7 +146,7 @@ This project is licensed under the MIT License.
 1. Клонируйте репозиторий:
     ```bash
     git clone https://github.com/darkweid/tg-trade-bot-websocket
-    cd bybit-simple-tg-bot
+    cd tg-trade-bot-websocket
     ```
 
 2. Построите Docker-образ:
@@ -177,7 +177,7 @@ This project is licensed under the MIT License.
 1. Клонируйте репозиторий:
     ```bash
     git clone https://github.com/darkweid/tg-trade-bot-websocket
-    cd bybit-simple-tg-bot
+    cd tg-trade-bot-websocket
     ```
 
 2. Создайте виртуальное окружение и установите зависимости:
